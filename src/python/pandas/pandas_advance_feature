@@ -1,0 +1,149 @@
+#coding:utf-8
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+
+print '############ Pandas 高级用法##############'
+print '########  Group  按行业group 再筛选，不然不同行业情况不一样 无法挑选 #############'
+period = pd.date_range('2017-11-11', periods=10000, freq='2D')  #freq='D' ----> frequence 1 day  2d : 2DAY
+df = pd.DataFrame(np.random.randn(10000, 4), columns=['Data1','Data2', 'Data3', 'Data4'], index= period)
+print df.head() #查看前5行
+
+df['group1'] = np.random.choice(['A', 'B', 'C', 'D'], 10000)
+print df.tail()
+
+grouped = df.groupby('group1')
+
+print type(grouped)
+print grouped.size()
+
+print grouped.sum()
+print grouped.max()
+print grouped.mean()
+print grouped.describe()
+
+print np.transpose(grouped)
+
+print '###### 查看group a #######'
+print grouped.get_group('A').head()
+
+
+
+print '###########  双重 分组Group   ########'
+df['group2'] = np.random.choice(['Python','C++','Java'],10000)
+print df.head()
+
+grouped = df.groupby(['group1', 'group2'])
+print grouped.size()
+print grouped.max()
+
+
+print grouped.mean()
+print grouped.sum()
+print '#### mean sum 在同一个表中aggregate 聚合'
+print grouped.agg([np.mean, np.sum])
+print grouped.agg({'Data1': np.mean, 'Data2': np.sum})
+
+
+print '############### Pandas Concat Join Merge 用法 ##############'
+
+df1 = pd.DataFrame(['10', '20', '25', '30'],
+                   index=['a', 'b', 'c', 'd'],
+                   columns=['PE',])
+
+df2 = pd.DataFrame(['2.5', '3.2', '2.5'],
+                   index=['a', 'd', 'g'],
+                   columns=['PB',])
+
+print '##### Concat 操作 #######'
+print pd.concat((df1, df2))       #默认不匹配索引
+print pd.concat((df1, df2), axis=1)  #axis=1 代表横向concat， 会自动匹配索引
+print pd.concat((df1, df2), ignore_index=True) #忽视索引，
+
+
+print '##### Join 操作 #######'
+print df1.join(df2)
+print df1.join(df2, how='left')
+print df1.join(df2, how='right')
+print df2.join(df1)
+
+df = pd.DataFrame({'PE': df1['PE'],
+                   'PB': df2['PB']})
+print df
+
+print '##### Merge 操作 #######'
+print '##### Merge 操作： 同等数量合并 #########'
+
+df2 = pd.DataFrame(['2.5', '3.2', '2.5','2'],
+                   index=['a', 'b', 'c', 'd'],
+                   columns=['PB',])
+roe = pd.Series([0.12, 0.06, 0.08, 0.02], index=['a', 'b', 'c', 'd'])
+df1['ROE'] = roe
+df2['ROE'] = roe
+
+print df1
+print df2
+
+print pd.merge(df1,df2)
+
+print df1.join(df2, rsuffix='_r')
+
+print pd.merge(df1, df2, left_index=True, right_index=True, how='outer')
+
+print pd.merge(df1, df2, how='outer')
+
+
+
+
+print '##### Merge 操作： 非同等数量合并 #########'
+
+df2 = pd.DataFrame(['2.5', '3.2', '2.5'],
+                   index=['a', 'b', 'c'],
+                   columns=['PB',])
+
+df1 = pd.DataFrame(['10', '20', '25', '30'],
+                   index=['a', 'b', 'c', 'd'],
+                   columns=['PE',])
+
+roe = pd.Series([0.12, 0.06, 0.08], index=['b', 'd', 'c'])
+df1['ROE'] = roe
+df2['ROE'] = roe
+
+print pd.merge(df1, df2)
+print pd.merge(df1, df2, on='ROE')
+
+print df1.join(df2,rsuffix='_r')
+
+print pd.merge(df1, df2, left_index=True, right_index=True, how='outer')
+
+print pd.merge(df1, df2, how='left')
+
+df1['ROE1'] = roe
+df2['ROE2'] = roe
+print pd.merge(df1, df2, left_on='ROE1', right_on='ROE2')
+
+
+
+
+print '##### Index 操作： 层次化索引 #########'
+
+df = pd.Series(np.random.randn(5),index=[['a','a','b','b','b'],[1,2,1,2,3]])
+print df
+print df.index
+print df['b']  #使用层次化索引
+
+print df.unstack()   #使用unstack方法将数据重新排列, 平面化
+
+print df.unstack().stack()
+
+print df.sum(level=1)
+
+print df.groupby(level=0).sum()
+
+
+
+
+
+
+
