@@ -5,3 +5,5 @@
 # welcome any query
 
 # http://www.sharequants.com   (webpage to be build)
+
+#chinese comment only, let me know if you need english version
