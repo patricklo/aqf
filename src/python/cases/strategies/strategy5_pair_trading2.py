@@ -120,3 +120,16 @@ data['return_strategy'] = 0.5*(data['position_1'].shift(1)*data['return_600199']
 
 data[['return_600199','return_600702','return_strategy']].dropna().cumsum().apply(np.exp).plot(figsize=(10,6), title='Strategy Backtesting')
 plt.show()
+
+
+'''
+思考：
+1.对多只ETF进行pair trading,是量化基金的常用策略
+
+风险和存在的问题：
+1. spread 不回归的风险， 当市场结构发生重大改变时，用过去历史回归出来的spread会发生不回归的重大风险
+2. 中国市场做空限制，策略中有部分做空的收益无法获得
+3. 回归系数需要定期rebalancing
+4. 策略没有考虑交易成本和其他成本 
+
+'''
