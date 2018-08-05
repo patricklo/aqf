@@ -22,7 +22,7 @@ SMA（Simple Moving Average)简单移动平均线策略，也叫双均线模型�
 
 print '####1. 数据准备'
 #tushare数据
-data = ts.get_k_data('600030',start = '2010-04-01', end = '2016-11-01')   #获取K线数据，数据类型为DataFrame
+data = ts.get_k_data('hs300',start = '2010-01-01', end = '2017-06-30') [['date','close']]  #获取K线数据，数据类型为DataFrame
 #data = pd.DataFrame(data)  #转换data数据为DataFrame, 因为tushare接口返回的就是DF数据类型，故不需要此行
 
 #print data.head()  #head() 输出前面几条数据（默认前5条），可省略
@@ -79,7 +79,7 @@ data['strategy_return'] = data['position'].shift(1) * data['returns']
 print data[['returns','strategy_return']].sum()
 
 #data[['returns','strategy_return']].plot(figsize=(10,6))                                                                 #np.log() -> 连续return
-#data[['returns','strategy_return']].cumsum().apply(np.exp).plot(figsize=(10, 6))   # 计算累计收益-》 returns cumulative sum(累计求和）, apply应用（np.exp)自然底数e
+data[['returns','strategy_return']].cumsum().apply(np.exp).plot(title='SMA strategy 1', figsize=(10, 6))   # 计算累计收益-》 returns cumulative sum(累计求和）, apply应用（np.exp)自然底数e
 '''
 即 e ^[ln(P(t)/P(t-1)+ln(P(t+1)/P(t)+...+]  = e ^ ln(P(t)/P(t-1)) * e ^ ln(P(t+1)/P(t)) * ... *   -> e 和 ln抵消
     = [P(t)/P(t-1)] * [P(t+1)/P(t)] * ... * 最终结果  ->>>>累计收益
@@ -114,7 +114,7 @@ print periods[12:25]
 print periods.max()
 
 
-#plt.show()
+plt.show()
 
 
 print '###5. 策略优化思路'

@@ -38,7 +38,7 @@ print '####3. 计算市场的收益（market_return）以及策略的年华收�
 data['market_return'] = np.log(data['close'] / data['close'].shift(1)) #.shift(1) 拿前一个数据，即前一天close价格。计算出收益
 ####策略return(strategy_return)
 data['strategy_return'] = data['position'].shift(1) * data['market_return']
-data[['market_return','strategy_return']].cumsum().apply(np.exp).plot(figsize=(10, 6))   # 计算累计收益-》 returns cumulative sum(累计求和）, apply应用（np.exp)自然底数e
+data[['market_return','strategy_return']].cumsum().apply(np.exp).plot(title='SMA strategy 2', figsize=(10, 6))   # 计算累计收益-》 returns cumulative sum(累计求和）, apply应用（np.exp)自然底数e
 plt.show()
 
 
