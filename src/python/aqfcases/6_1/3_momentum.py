@@ -7,6 +7,11 @@ import warnings
 warnings.simplefilter('ignore') #忽略警告信息
 import tushare as ts
 
+#解决中文标题显示问题
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 
 '''
 本代码对应 -> 4.三大经典策略_2.动量策略momemtum_1
@@ -35,25 +40,33 @@ strategy思想： 前提：
 '''
 
 print '####1. 数据准备'
+data = ts.get_k_data('hs300',start = '2010-01-01', end = '2017-06-30') [['date','close']]
 
-
-
+data.rename(columns={'close':'price'},inplace=True)
+data.set_index('date',inplace=True)
 
 print '####2. 策略思路开发'
+data['market_return'] = np.log(data['price'] / data['price'].shift(1))
+data['position'] = np.sign(data['market_return'])
 
-
-print '####3. 计算市场的收益（returns）以及策略的年华收益(strategy_returns)， 并且可视化'
-
-
+print '####3. 计算市场的收益（market_return）以及策略的年华收益(strategy_return)， 并且可视化'
+data['strategy_return'] = data['position'].shift(1) * data['market_return']
+#data[['market_return','strategy_return']].cumsum().apply(np.exp).plot(title='动量策略 - Momentum Strategy', figsize=(10,6))
 
 print '###4. 策略收益的风险评估'
 
 
+print '###5. 策略优化'
+##解决：交易次数过于频繁
+##优化1. 从看过去1天的数据  -> 看过去5天的数据
+data['mean_5days'] = data['market_return'].rolling(5).mean()
+data['position_mean_5days'] = np.sign(data['mean_5days'])
+data['strategy_return_5days'] = data['position_mean_5days'].shift(1) * data['market_return']
+data[['market_return','strategy_return','strategy_return_5days']].dropna().cumsum().apply(np.exp).plot(title='动量策略 - Momentum Strategy (5 days)', figsize=(10,6))
+
+##优化2：参数寻优
 
 
-print '###5. 策略优化思路'
 
 
-
-
-
+plt.show()

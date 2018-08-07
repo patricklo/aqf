@@ -42,5 +42,3 @@ data[['market_return','strategy_return']].cumsum().apply(np.exp).plot(title='SMA
 plt.show()
 
 
-
-
