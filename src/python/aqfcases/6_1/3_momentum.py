@@ -62,11 +62,18 @@ print '###5. 策略优化'
 data['mean_5days'] = data['market_return'].rolling(5).mean()
 data['position_mean_5days'] = np.sign(data['mean_5days'])
 data['strategy_return_5days'] = data['position_mean_5days'].shift(1) * data['market_return']
-data[['market_return','strategy_return','strategy_return_5days']].dropna().cumsum().apply(np.exp).plot(title='动量策略 - Momentum Strategy (5 days)', figsize=(10,6))
+#data[['market_return','strategy_return','strategy_return_5days']].dropna().cumsum().apply(np.exp).plot(title='动量策略 - Momentum Strategy (5 days)', figsize=(10,6))
 
 ##优化2：参数寻优
 
+##优化3：使用高频一些的数据 如：分钟，秒级数据
+hs300_hf = ts.get_k_data('hs300',ktype='5')
+hs300_hf.set_index('date',inplace=True)
+hs300_hf.index = hs300_hf.index.to_datetime()
 
-
+hs300_hf['market_return'] = np.log(hs300_hf['close']/hs300_hf['close'].shift(1))
+hs300_hf['position'] = np.sign(hs300_hf['market_return'].rolling(30).mean())
+hs300_hf['strategy_return'] = hs300_hf['position'].shift(1) * hs300_hf['market_return']
+hs300_hf[['market_return','strategy_return']].dropna().cumsum().apply(np.exp).plot(figsize=(10,6))
 
 plt.show()
