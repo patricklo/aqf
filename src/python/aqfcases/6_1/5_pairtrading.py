@@ -18,7 +18,11 @@ sys.setdefaultencoding('utf-8')
 
 A股和H股套利： 同一公司在分别在A和H股上市
 内外盘： 同上，跨市场
-同行业的两只股票： 
+同行业的两只股票： 有内在关系，数据平稳（stationary, )
+
+
+pair trading : 1. stationary - 
+2. non-stationary 
 
 
 '''
