@@ -127,7 +127,22 @@ for i in range(2*LENGTH, len(data)):  #从第20天开始看，因为前20天的�
                 #当天开仓后，当天不进行平仓操作
 
 
+print '#####4. 计算策略收益'
+data['return'].fillna(0,inplace=True)
+data['strategy_return'] = (data['return']+1).cumprod()
+data['stock_return'] = (data['pct_change']+1).cumprod()
 
+
+print '####5. 绘图'
+import matplotlib
+import matplotlib.pyplot as plt
+fig = plt.figure(figsize=(10,6))
+ax=fig.add_subplot(1,1,1)
+ax.plot(data.stock_return)
+ax.plot(data.strategy_return)
+plt.title(CODE)
+plt.legend()
+plt.show()
 
 
 
