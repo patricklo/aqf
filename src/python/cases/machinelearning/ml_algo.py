@@ -103,16 +103,37 @@ features_trained, features_test, label_trained, label_test = train_test_split(da
 # plot_pic(clf_KNN, features_test,label_test)
 
 '''
-4. 朴素贝叶斯算法实现
+4. 朴素贝叶斯(naive_bayes)算法实现:
+
+bayes贝叶斯公式:AB同时发生的概率  P(AB) = P(A) * P(B|A) = P(B) * P(A|B) 
 '''
 
-from sklearn.naive_bayes import GaussianNB
+# from sklearn.naive_bayes import GaussianNB
+#
+# clf_NB = GaussianNB()
+# clf_NB.fit(features_trained, label_trained)
+#
+# predict_label_test_NB = clf_NB.predict(features_test)
+# plot_pic(clf_NB, features_test, label_test)
 
-clf_NB = GaussianNB()
-clf_NB.fit(features_trained, label_trained)
 
-predict_label_test_NB = clf_NB.predict(features_test)
-plot_pic(clf_NB, features_test, label_test)
+'''
+5. SVM支持向量机算法
 
+  SVC: 分类问题
+  SVR：回归问题
+'''
+from sklearn.svm import SVC
+# clf_SVC = SVC()
+# clf_SVC.fit(features_trained,label_trained)
+#
+# predict_label_test_SVC = clf_SVC.predict(features_test)
+# plot_pic(clf_SVC, features_test, label_test)
 
+clf_SVC2 = SVC(kernel='rbf') ### Kernel: SVC - rbf : 高斯核   默认的， 不给定也行
+###gamma=auto是默认 需要人为经验去定义 ， 可指定 数字， 控制 SVM中点到决策边界的距离大小的影响权重， gamma越大,代表到决策边界最近的点的权重越大
+#clf_SVC2 = SVC(kernel='rbf', gamma=1000)
+clf_SVC2.fit(features_trained,label_trained)
 
+predict_label_test_SVC = clf_SVC2.predict(features_test)
+plot_pic(clf_SVC2, features_test, label_test)
